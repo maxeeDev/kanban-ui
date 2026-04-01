@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "oxlint --tsconfig tsconfig.json src"
+    "lint": "oxlint --tsconfig tsconfig.json src",
+    "format": "prettier --write ."
   },
   "private": true,
   "packageManager": "npm@11.10.1",
