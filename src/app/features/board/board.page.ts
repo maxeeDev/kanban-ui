@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { BoardColumnComponent } from './components/board-column/board-column.component';
 import { TaskEditorComponent, TaskEditorValue } from './components/task-editor/task-editor.component';
 import { BoardColumnId, KanbanCard } from './models/kanban.models';
+import { BoardI18nService, BoardLocale } from './services/board-i18n.service';
 import { BoardStateService } from './services/board-state.service';
 
 @Component({
@@ -14,16 +15,43 @@ import { BoardStateService } from './services/board-state.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BoardPage {
+  private readonly i18n = inject(BoardI18nService);
   private readonly boardState = inject(BoardStateService);
   private readonly activeEditor = signal<{ mode: 'create' | 'edit'; columnId: BoardColumnId; cardId: string | null } | null>(null);
-  private readonly persistenceMessage = signal<string>('Local backup is active.');
+  private readonly persistenceEvent = signal<{ kind: 'idle' | 'connected' | 'connect-failed' | 'reloaded' | 'reload-failed'; fileName?: string }>({ kind: 'idle' });
 
+  protected readonly copy = this.i18n.copy;
+  protected readonly locale = this.i18n.locale;
+  protected readonly locales = this.i18n.locales;
   protected readonly columns = this.boardState.columns;
   protected readonly cardCount = this.boardState.cardCount;
   protected readonly connectedColumnIds = computed(() => this.columns().map((column) => column.id));
   protected readonly supportsFilePersistence = this.boardState.supportsFilePersistence;
   protected readonly linkedFileName = this.boardState.linkedFileName;
-  protected readonly persistenceStatus = this.persistenceMessage.asReadonly();
+  protected readonly persistenceStatus = computed(() => {
+    const copy = this.copy();
+    const event = this.persistenceEvent();
+
+    switch (event.kind) {
+      case 'connected':
+        return copy.connectedToFile(event.fileName ?? 'board file');
+      case 'connect-failed':
+        return copy.connectFileFailed;
+      case 'reloaded':
+        return copy.reloadedFromFile(event.fileName ?? 'linked file');
+      case 'reload-failed':
+        return copy.reloadFailed;
+      case 'idle':
+      default:
+        return copy.localBackupActive;
+    }
+  });
+  protected readonly storageNote = computed(() => {
+    const copy = this.copy();
+    const fileName = this.linkedFileName();
+
+    return fileName ? copy.linkedFileNote(fileName) : copy.savedLocally;
+  });
   protected readonly editor = this.activeEditor.asReadonly();
   protected readonly editorCard = computed(() => {
     const editor = this.activeEditor();
@@ -89,23 +117,25 @@ export class BoardPage {
     );
   }
 
+  protected setLocale(locale: BoardLocale): void {
+    this.i18n.setLocale(locale);
+  }
+
   protected async connectBoardFile(): Promise<void> {
     const connected = await this.boardState.connectBoardFile();
-
-    this.persistenceMessage.set(
+    this.persistenceEvent.set(
       connected
-        ? `Saving to ${this.linkedFileName() ?? 'board file'} and keeping local backup.`
-        : 'File connection was cancelled or permission was not granted. Local backup is still active.'
+        ? { kind: 'connected', fileName: this.linkedFileName() ?? undefined }
+        : { kind: 'connect-failed' }
     );
   }
 
   protected async reloadFromFile(): Promise<void> {
     const reloaded = await this.boardState.reloadFromFile();
-
-    this.persistenceMessage.set(
+    this.persistenceEvent.set(
       reloaded
-        ? `Reloaded board from ${this.linkedFileName() ?? 'linked file'}. Local backup was refreshed.`
-        : 'No readable linked file was available. The local backup remains in use.'
+        ? { kind: 'reloaded', fileName: this.linkedFileName() ?? undefined }
+        : { kind: 'reload-failed' }
     );
   }
 }

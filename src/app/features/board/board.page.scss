@@ -30,6 +30,23 @@
   max-width: 40rem;
 }
 
+.page-header__locale {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.page-header__locale-label {
+  color: var(--surface-ink-soft);
+  font-size: 0.9rem;
+}
+
+.page-header__locale-button[aria-pressed='true'] {
+  background: #dce4ec;
+  border-color: rgba(47, 58, 68, 0.28);
+}
+
 .page-header__eyebrow {
   color: var(--surface-ink-soft);
   font-size: 0.78rem;

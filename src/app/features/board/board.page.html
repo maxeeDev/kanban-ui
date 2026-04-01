@@ -1,40 +1,49 @@
 <section class="board-shell" data-testid="board:page">
   <header class="page-header">
     <div class="page-header__copy">
-      <p class="page-header__eyebrow">Private board</p>
-      <h1>Kanban</h1>
+      <p class="page-header__eyebrow">{{ copy().privateBoard }}</p>
+      <h1>{{ copy().boardTitle }}</h1>
       <p class="page-header__lede">
-        A focused board for moving work from backlog to done without extra ceremony.
+        {{ copy().boardLede }}
       </p>
+
+      <div class="page-header__locale" [attr.aria-label]="copy().language">
+        <span class="page-header__locale-label">{{ copy().language }}</span>
+
+        @for (supportedLocale of locales; track supportedLocale) {
+          <button
+            type="button"
+            class="page-header__locale-button"
+            [attr.aria-pressed]="locale() === supportedLocale"
+            (click)="setLocale(supportedLocale)"
+          >
+            {{ copy().languageNames[supportedLocale] }}
+          </button>
+        }
+      </div>
     </div>
 
     <div class="page-header__meta" aria-label="Board summary">
-      <p class="page-header__metric-label">Cards on board</p>
+      <p class="page-header__metric-label">{{ copy().cardsOnBoard }}</p>
       <strong class="page-header__metric-value">{{ cardCount() }}</strong>
-      <p class="page-header__metric-note">
-        @if (linkedFileName()) {
-          Saving to {{ linkedFileName() }} with local backup.
-        } @else {
-          Saved locally in this browser.
-        }
-      </p>
+      <p class="page-header__metric-note">{{ storageNote() }}</p>
       <p class="page-header__metric-note">{{ persistenceStatus() }}</p>
       <button type="button" class="page-header__action" (click)="openCreateCard()">
-        Add task
+        {{ copy().addTask }}
       </button>
 
       @if (supportsFilePersistence()) {
         <button type="button" class="page-header__action" (click)="connectBoardFile()">
-          {{ linkedFileName() ? 'Reconnect file' : 'Link board file' }}
+          {{ linkedFileName() ? copy().reconnectFile : copy().linkBoardFile }}
         </button>
         <button type="button" class="page-header__action" (click)="reloadFromFile()" [disabled]="!linkedFileName()">
-          Reload file
+          {{ copy().reloadFile }}
         </button>
       }
     </div>
   </header>
 
-  <section class="board-grid" data-testid="board:grid" aria-label="Kanban columns">
+  <section class="board-grid" data-testid="board:grid" [attr.aria-label]="copy().kanbanColumns">
     @for (column of columns(); track column.id) {
       <app-board-column
         [column]="column"

@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
 import { NonNullableFormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { BoardColumnId, BOARD_COLUMN_TITLES, KanbanCard } from '../../models/kanban.models';
+import { BoardColumnId, KanbanCard } from '../../models/kanban.models';
+import { BoardI18nService } from '../../services/board-i18n.service';
 
 export interface TaskEditorValue {
   title: string;
@@ -17,6 +18,7 @@ export interface TaskEditorValue {
 })
 export class TaskEditorComponent {
   private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly i18n = inject(BoardI18nService);
 
   readonly mode = input.required<'create' | 'edit'>();
   readonly columnId = input.required<BoardColumnId>();
@@ -31,7 +33,7 @@ export class TaskEditorComponent {
     description: ['', [Validators.maxLength(1200)]]
   });
 
-  protected readonly columnTitles = BOARD_COLUMN_TITLES;
+  protected readonly copy = this.i18n.copy;
 
   private readonly syncFormEffect = effect(() => {
     const card = this.card();

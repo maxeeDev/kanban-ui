@@ -2,7 +2,7 @@
   <header class="card__header">
     <h3>{{ card().title }}</h3>
     <button type="button" class="card__action" (click)="editCard.emit()">
-      Edit
+      {{ copy().edit }}
     </button>
   </header>
 
@@ -10,5 +10,5 @@
     <p class="card__description">{{ card().description }}</p>
   }
 
-  <p class="card__meta">Updated {{ card().updatedAt | date: 'mediumDate' }}</p>
+  <p class="card__meta">{{ updatedLabel() }}</p>
 </article>

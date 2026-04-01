@@ -6,11 +6,11 @@
   <header class="column__header">
     <div>
       <h2>{{ column().title }}</h2>
-      <p>{{ column().cards.length }} cards</p>
+      <p>{{ cardCountLabel() }}</p>
     </div>
 
     <button type="button" class="column__action" (click)="openCreateCard()">
-      Add
+      {{ copy().add }}
     </button>
   </header>
 
@@ -23,7 +23,7 @@
     (cdkDropListDropped)="cardDropped.emit($event)"
   >
     @if (column().cards.length === 0) {
-      <p class="column__empty">No cards yet.</p>
+      <p class="column__empty">{{ copy().noCardsYet }}</p>
     } @else {
       @for (card of column().cards; track card.id) {
         <div cdkDrag>

@@ -7,6 +7,7 @@ import {
   KanbanCard,
   KanbanBoardState
 } from '../models/kanban.models';
+import { BoardI18nService } from './board-i18n.service';
 import { BoardFileStorageService } from './board-file-storage.service';
 import { createEmptyBoardState, isKanbanBoardState } from '../utils/board-state.utils';
 
@@ -14,6 +15,7 @@ const BOARD_STORAGE_KEY = 'kanban-ui.board.v1';
 
 @Injectable({ providedIn: 'root' })
 export class BoardStateService {
+  private readonly i18n = inject(BoardI18nService);
   private readonly fileStorage = inject(BoardFileStorageService);
   private readonly boardState = signal<KanbanBoardState>(createEmptyBoardState());
   private readonly hasHydrated = signal(false);
@@ -23,13 +25,14 @@ export class BoardStateService {
   readonly linkedFileName = this.fileStorage.linkedFileName.asReadonly();
   readonly columns = computed<BoardColumnView[]>(() => {
     const board = this.boardState();
+    const copy = this.i18n.copy();
 
     return BOARD_COLUMN_ORDER.map((columnId) => {
       const column = board.columns[columnId];
 
       return {
         id: column.id,
-        title: column.title,
+        title: copy.columnTitles[column.id],
         cards: column.cardIds
           .map((cardId) => board.cards[cardId])
           .filter((card) => card !== undefined)
