@@ -1,0 +1,64 @@
+:host {
+  display: block;
+}
+
+.board-shell {
+  display: grid;
+  gap: 1.5rem;
+  min-height: 100dvh;
+  padding: 1.5rem;
+}
+
+.page-header {
+  display: flex;
+  gap: 1rem;
+  align-items: end;
+  justify-content: space-between;
+}
+
+.page-header__copy {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 40rem;
+}
+
+.page-header__eyebrow,
+.page-header__metric-label,
+.page-header__metric-note {
+  margin: 0;
+}
+
+.page-header__lede {
+  margin: 0;
+  max-width: 34rem;
+}
+
+.page-header__meta {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 11rem;
+}
+
+.page-header__metric-value {
+  font-size: 2.25rem;
+  line-height: 1;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(16rem, 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .page-header {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .board-grid {
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+  }
+}

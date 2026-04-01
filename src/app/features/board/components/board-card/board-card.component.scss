@@ -1,0 +1,14 @@
+:host {
+  display: block;
+}
+
+.card {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.card__header h3,
+.card__description,
+.card__meta {
+  margin: 0;
+}

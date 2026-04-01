@@ -1,0 +1,18 @@
+<section class="column" [attr.data-testid]="'board:column:' + column().id">
+  <header class="column__header">
+    <div>
+      <h2>{{ column().title }}</h2>
+      <p>{{ column().cards.length }} cards</p>
+    </div>
+  </header>
+
+  <div class="column__body">
+    @if (column().cards.length === 0) {
+      <p class="column__empty">No cards yet.</p>
+    } @else {
+      @for (card of column().cards; track card.id) {
+        <app-board-card [card]="card" />
+      }
+    }
+  </div>
+</section>

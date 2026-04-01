@@ -1,0 +1,11 @@
+<article class="card" [attr.data-testid]="'board:card:' + card().id">
+  <header class="card__header">
+    <h3>{{ card().title }}</h3>
+  </header>
+
+  @if (card().description) {
+    <p class="card__description">{{ card().description }}</p>
+  }
+
+  <p class="card__meta">Updated {{ card().updatedAt | date: 'mediumDate' }}</p>
+</article>

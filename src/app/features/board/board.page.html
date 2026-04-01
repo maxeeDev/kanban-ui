@@ -1,0 +1,23 @@
+<section class="board-shell" data-testid="board:page">
+  <header class="page-header">
+    <div class="page-header__copy">
+      <p class="page-header__eyebrow">Private board</p>
+      <h1>Kanban</h1>
+      <p class="page-header__lede">
+        A focused board for moving work from backlog to done without extra ceremony.
+      </p>
+    </div>
+
+    <div class="page-header__meta" aria-label="Board summary">
+      <p class="page-header__metric-label">Cards on board</p>
+      <strong class="page-header__metric-value">{{ cardCount() }}</strong>
+      <p class="page-header__metric-note">Saved locally in this browser.</p>
+    </div>
+  </header>
+
+  <section class="board-grid" data-testid="board:grid" aria-label="Kanban columns">
+    @for (column of columns(); track column.id) {
+      <app-board-column [column]="column" />
+    }
+  </section>
+</section>
