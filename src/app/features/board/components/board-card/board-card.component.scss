@@ -5,6 +5,21 @@
 .card {
   display: grid;
   gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(42, 51, 60, 0.08);
+  border-radius: var(--radius-card);
+  background: var(--surface-panel-strong);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    border-color 160ms ease;
+}
+
+.card:hover {
+  border-color: rgba(42, 51, 60, 0.16);
+  box-shadow: 0 14px 26px rgba(31, 37, 45, 0.12);
+  transform: translateY(-2px);
 }
 
 .card__header {
@@ -18,4 +33,23 @@
 .card__description,
 .card__meta {
   margin: 0;
+}
+
+.card__header h3 {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+.card__description {
+  color: var(--surface-ink-soft);
+  line-height: 1.5;
+}
+
+.card__meta {
+  color: var(--surface-ink-soft);
+  font-size: 0.85rem;
+}
+
+.card__action {
+  padding: 0.4rem 0.75rem;
 }

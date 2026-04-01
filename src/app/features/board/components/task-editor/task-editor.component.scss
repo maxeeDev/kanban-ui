@@ -10,12 +10,19 @@
   justify-content: center;
   padding: 1.5rem;
   position: absolute;
+  background: rgba(28, 34, 41, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .editor {
   display: grid;
   gap: 1rem;
   width: min(32rem, 100%);
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-shell);
+  background: rgba(255, 252, 247, 0.95);
+  box-shadow: 0 28px 60px rgba(18, 24, 31, 0.18);
 }
 
 .editor__header {
@@ -30,6 +37,14 @@
   margin: 0;
 }
 
+.editor__eyebrow {
+  color: var(--surface-ink-soft);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
 .editor__form {
   display: grid;
   gap: 1rem;
@@ -42,10 +57,22 @@
 
 .editor__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 0.75rem;
   justify-content: end;
 }
 
 .editor__delete {
   margin-right: auto;
+}
+
+@media (max-width: 640px) {
+  .editor-backdrop {
+    padding: 1rem;
+    align-items: end;
+  }
+
+  .editor {
+    border-radius: 24px;
+  }
 }

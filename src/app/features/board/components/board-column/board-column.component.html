@@ -1,4 +1,8 @@
-<section class="column" [attr.data-testid]="'board:column:' + column().id">
+<section
+  class="column"
+  [attr.data-column-id]="column().id"
+  [attr.data-testid]="'board:column:' + column().id"
+>
   <header class="column__header">
     <div>
       <h2>{{ column().title }}</h2>

@@ -1,1 +1,111 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+	color-scheme: light;
+	--surface-canvas: #f2eee7;
+	--surface-shell: rgba(255, 252, 247, 0.88);
+	--surface-panel: rgba(255, 253, 249, 0.96);
+	--surface-panel-strong: #fffdf9;
+	--surface-muted: #ece6db;
+	--surface-ink: #1f252d;
+	--surface-ink-soft: #5f6772;
+	--surface-line: rgba(73, 81, 92, 0.16);
+	--surface-line-strong: rgba(45, 54, 64, 0.26);
+	--shadow-soft: 0 18px 45px rgba(33, 39, 46, 0.08);
+	--shadow-card: 0 8px 24px rgba(31, 37, 45, 0.08);
+	--radius-shell: 30px;
+	--radius-panel: 24px;
+	--radius-card: 18px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 16px;
+}
+
+body {
+	margin: 0;
+	min-height: 100dvh;
+	background:
+		radial-gradient(circle at top left, rgba(199, 185, 165, 0.36), transparent 28%),
+		radial-gradient(circle at bottom right, rgba(168, 176, 185, 0.24), transparent 26%),
+		linear-gradient(180deg, #f8f5ef 0%, var(--surface-canvas) 100%);
+	color: var(--surface-ink);
+	font-family: 'Aptos', 'Segoe UI Variable Text', 'Segoe UI', sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+button,
+input,
+textarea {
+	font: inherit;
+}
+
+button {
+	appearance: none;
+	border: 1px solid var(--surface-line);
+	border-radius: 999px;
+	background: var(--surface-panel-strong);
+	color: var(--surface-ink);
+	cursor: pointer;
+	padding: 0.75rem 1rem;
+	transition:
+		transform 160ms ease,
+		border-color 160ms ease,
+		background-color 160ms ease,
+		box-shadow 160ms ease;
+}
+
+button:hover {
+	border-color: var(--surface-line-strong);
+	box-shadow: var(--shadow-card);
+	transform: translateY(-1px);
+}
+
+button:active {
+	transform: translateY(0);
+}
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+	outline: 2px solid #55687c;
+	outline-offset: 2px;
+}
+
+input,
+textarea {
+	width: 100%;
+	border: 1px solid var(--surface-line);
+	border-radius: 16px;
+	background: rgba(255, 253, 249, 0.92);
+	color: var(--surface-ink);
+	padding: 0.9rem 1rem;
+}
+
+textarea {
+	min-height: 8rem;
+	resize: vertical;
+}
+
+h1,
+h2,
+h3,
+p {
+	margin: 0;
+}
+
+.cdk-drag-preview {
+	border-radius: var(--radius-card);
+	box-shadow: 0 22px 40px rgba(28, 34, 41, 0.18);
+}
+
+.cdk-drag-placeholder {
+	opacity: 0.35;
+}
+
+.cdk-drop-list-dragging .card:not(.cdk-drag-placeholder) {
+	transition: transform 160ms ease;
+}
