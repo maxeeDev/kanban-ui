@@ -1,0 +1,37 @@
+<section class="editor-backdrop">
+  <aside class="editor" aria-label="Task editor" data-testid="board:editor">
+    <header class="editor__header">
+      <div>
+        <p class="editor__eyebrow">{{ columnTitles[columnId()] }}</p>
+        <h2>{{ mode() === 'create' ? 'Create task' : 'Edit task' }}</h2>
+      </div>
+
+      <button type="button" class="editor__close" (click)="cancelled.emit()">
+        Close
+      </button>
+    </header>
+
+    <form class="editor__form" [formGroup]="form" (ngSubmit)="submit()">
+      <label class="editor__field">
+        <span>Title</span>
+        <input type="text" formControlName="title" maxlength="120" />
+      </label>
+
+      <label class="editor__field">
+        <span>Description</span>
+        <textarea formControlName="description" rows="6" maxlength="1200"></textarea>
+      </label>
+
+      <footer class="editor__actions">
+        @if (mode() === 'edit') {
+          <button type="button" class="editor__delete" (click)="deleted.emit()">
+            Delete
+          </button>
+        }
+
+        <button type="button" (click)="cancelled.emit()">Cancel</button>
+        <button type="submit">{{ mode() === 'create' ? 'Create' : 'Save' }}</button>
+      </footer>
+    </form>
+  </aside>
+</section>

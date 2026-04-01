@@ -1,6 +1,9 @@
 <article class="card" [attr.data-testid]="'board:card:' + card().id">
   <header class="card__header">
     <h3>{{ card().title }}</h3>
+    <button type="button" class="card__action" (click)="editCard.emit()">
+      Edit
+    </button>
   </header>
 
   @if (card().description) {

@@ -8,6 +8,13 @@
   min-width: 16rem;
 }
 
+.column__header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
 .column__header h2,
 .column__header p,
 .column__empty {
@@ -17,4 +24,5 @@
 .column__body {
   display: grid;
   gap: 0.75rem;
+  min-height: 10rem;
 }

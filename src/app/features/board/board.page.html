@@ -12,12 +12,31 @@
       <p class="page-header__metric-label">Cards on board</p>
       <strong class="page-header__metric-value">{{ cardCount() }}</strong>
       <p class="page-header__metric-note">Saved locally in this browser.</p>
+      <button type="button" class="page-header__action" (click)="openCreateCard()">
+        Add task
+      </button>
     </div>
   </header>
 
   <section class="board-grid" data-testid="board:grid" aria-label="Kanban columns">
     @for (column of columns(); track column.id) {
-      <app-board-column [column]="column" />
+      <app-board-column
+        [column]="column"
+        (addCard)="openCreateCard($event)"
+        (cardDropped)="moveCard($event)"
+        (editCard)="openEditCard($event)"
+      />
     }
   </section>
+
+  @if (editor(); as activeEditor) {
+    <app-task-editor
+      [card]="editorCard()"
+      [columnId]="activeEditor.columnId"
+      [mode]="activeEditor.mode"
+      (cancelled)="closeEditor()"
+      (deleted)="deleteCard()"
+      (saved)="saveCard($event)"
+    />
+  }
 </section>

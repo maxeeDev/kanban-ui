@@ -1,0 +1,51 @@
+:host {
+  inset: 0;
+  position: fixed;
+}
+
+.editor-backdrop {
+  align-items: center;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  padding: 1.5rem;
+  position: absolute;
+}
+
+.editor {
+  display: grid;
+  gap: 1rem;
+  width: min(32rem, 100%);
+}
+
+.editor__header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.editor__header h2,
+.editor__eyebrow {
+  margin: 0;
+}
+
+.editor__form {
+  display: grid;
+  gap: 1rem;
+}
+
+.editor__field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.editor__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: end;
+}
+
+.editor__delete {
+  margin-right: auto;
+}

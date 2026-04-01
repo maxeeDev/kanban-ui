@@ -4,14 +4,26 @@
       <h2>{{ column().title }}</h2>
       <p>{{ column().cards.length }} cards</p>
     </div>
+
+    <button type="button" class="column__action" (click)="openCreateCard()">
+      Add
+    </button>
   </header>
 
-  <div class="column__body">
+  <div
+    cdkDropList
+    class="column__body"
+    [cdkDropListData]="column().cards"
+    [id]="column().id"
+    (cdkDropListDropped)="cardDropped.emit($event)"
+  >
     @if (column().cards.length === 0) {
       <p class="column__empty">No cards yet.</p>
     } @else {
       @for (card of column().cards; track card.id) {
-        <app-board-card [card]="card" />
+        <div cdkDrag>
+          <app-board-card [card]="card" (editCard)="editCard.emit(card.id)" />
+        </div>
       }
     }
   </div>

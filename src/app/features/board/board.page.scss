@@ -39,6 +39,10 @@
   min-width: 11rem;
 }
 
+.page-header__action {
+  justify-self: start;
+}
+
 .page-header__metric-value {
   font-size: 2.25rem;
   line-height: 1;
