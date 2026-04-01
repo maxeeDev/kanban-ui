@@ -5,10 +5,9 @@ import {
   BoardColumnId,
   BoardColumnView,
   KanbanCard,
-  KanbanBoardState,
-  createEmptyBoardState,
-  isKanbanBoardState
+  KanbanBoardState
 } from '../models/kanban.models';
+import { createEmptyBoardState, isKanbanBoardState } from '../utils/board-state.utils';
 
 const BOARD_STORAGE_KEY = 'kanban-ui.board.v1';
 
