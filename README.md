@@ -1,59 +1,134 @@
-# KanbanUi
+# Kanban UI
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.5.
+Private, classical Kanban board built with Angular 21.
 
-## Development server
+The app keeps a fixed four-column flow:
 
-To start a local development server, run:
+- Backlog
+- Waiting
+- In Progress
+- Done
+
+It is designed for personal use, stays visually restrained, supports drag and drop, persists board state across reloads, and can optionally save to a user-linked JSON file on disk while still keeping a local browser backup.
+
+## Features
+
+- Classical Kanban workflow with four fixed columns.
+- Create, edit, delete, and reorder cards.
+- Drag cards within a column and between columns.
+- Local persistence through `localStorage`.
+- Optional file persistence through a linked JSON file on your machine.
+- Automatic local backup even when a board file is linked.
+- English and German UI.
+- Responsive layout with restrained neutral styling.
+
+## Tech Stack
+
+- Angular 21
+- TypeScript
+- Angular CDK drag and drop
+- SCSS
+- Signals and computed state
+- IndexedDB for storing the linked file handle
+
+## Storage Model
+
+The board uses two persistence layers:
+
+1. Browser-local backup in `localStorage` under `kanban-ui.board.v1`.
+2. Optional JSON file persistence through the browser File System Access API.
+
+If you link a board file from the UI, the app writes updates to that file and also keeps the browser-local backup in sync. On startup, the app tries to restore from the linked file first and falls back to the local backup if no readable linked file is available.
+
+The JSON file is not written to a hardcoded folder. It is saved wherever you choose it in the browser file picker when you use `Link board file`.
+
+## Browser Support
+
+The local backup works in any modern browser with `localStorage` support.
+
+File-based persistence depends on the File System Access API, which is primarily available in Chromium-based browsers and works reliably on `localhost` during development. If the API is unavailable or file permission is not granted, the app continues to use the browser-local backup.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20 or newer
+- npm 11 or newer
+
+### Install
 
 ```bash
-ng serve
+npm install
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Run the app
 
 ```bash
-ng generate component component-name
+npm start
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+The development server runs on [http://localhost:4300](http://localhost:4300).
+
+## Available Scripts
 
 ```bash
-ng generate --help
+npm start
+npm run build
+npm run lint
+npm run format
+npm run test
 ```
 
-## Building
+Notes:
 
-To build the project run:
+- `npm run build` creates the production build in `dist/kanban-ui`.
+- `npm run lint` uses `oxlint`.
+- `npm run format` runs Prettier over the repository.
+- `npm run test` is available from the Angular scaffold, but unit testing is not part of the required validation flow for this project.
+
+## Project Structure
+
+```text
+src/
+	app/
+		app.routes.ts
+		features/
+			board/
+				board.page.*
+				components/
+					board-card/
+					board-column/
+					task-editor/
+				models/
+				services/
+				utils/
+```
+
+## Architecture Notes
+
+- Board state is centralized in a single feature-owned service.
+- Presentational components stay focused on rendering and emitting user actions.
+- Persistence is coordinated in the state layer, not inside the column or card components.
+- Translation is handled through a small board-specific i18n service.
+
+More detail is available in [docs/architecture.md](docs/architecture.md).
+
+## Validation
+
+The current working validation flow is:
 
 ```bash
-ng build
+npm run build
+npm run lint
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Roadmap Ideas
 
-## Running unit tests
+- Import an existing board JSON without relinking.
+- Confirmation flow for destructive bulk actions.
+- Card labels, due dates, or filtering.
+- Optional export history or board snapshots.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+## License
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+No license has been added to this repository yet.
