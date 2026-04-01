@@ -17,6 +17,7 @@
   <div
     cdkDropList
     class="column__body"
+    [cdkDropListConnectedTo]="connectedTo()"
     [cdkDropListData]="column().cards"
     [id]="column().id"
     (cdkDropListDropped)="cardDropped.emit($event)"

@@ -13,6 +13,7 @@ import { BoardCardComponent } from '../board-card/board-card.component';
 })
 export class BoardColumnComponent {
   readonly column = input.required<BoardColumnView>();
+  readonly connectedTo = input.required<string[]>();
   readonly addCard = output<BoardColumnId>();
   readonly editCard = output<string>();
   readonly cardDropped = output<CdkDragDrop<KanbanCard[]>>();

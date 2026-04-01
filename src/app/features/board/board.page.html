@@ -22,6 +22,7 @@
     @for (column of columns(); track column.id) {
       <app-board-column
         [column]="column"
+        [connectedTo]="connectedColumnIds()"
         (addCard)="openCreateCard($event)"
         (cardDropped)="moveCard($event)"
         (editCard)="openEditCard($event)"

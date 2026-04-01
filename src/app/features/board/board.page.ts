@@ -19,6 +19,7 @@ export class BoardPage {
 
   protected readonly columns = this.boardState.columns;
   protected readonly cardCount = this.boardState.cardCount;
+  protected readonly connectedColumnIds = computed(() => this.columns().map((column) => column.id));
   protected readonly editor = this.activeEditor.asReadonly();
   protected readonly editorCard = computed(() => {
     const editor = this.activeEditor();
