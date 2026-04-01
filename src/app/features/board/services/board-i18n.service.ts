@@ -20,6 +20,9 @@ interface BoardCopy {
   connectFileFailed: string;
   reloadedFromFile: (fileName: string) => string;
   reloadFailed: string;
+  clearClosedTickets: string;
+  clearedClosedTickets: (count: number) => string;
+  clearClosedTicketsEmpty: string;
   addTask: string;
   linkBoardFile: string;
   reconnectFile: string;
@@ -80,6 +83,9 @@ export class BoardI18nService {
         connectFileFailed: 'Die Dateiverknüpfung wurde abgebrochen oder die Berechtigung fehlt. Das lokale Backup bleibt aktiv.',
         reloadedFromFile: (fileName) => `Board wurde aus ${fileName} neu geladen. Das lokale Backup wurde aktualisiert.`,
         reloadFailed: 'Keine lesbare verknüpfte Datei verfügbar. Das lokale Backup wird weiter verwendet.',
+        clearClosedTickets: 'Erledigte Tickets löschen',
+        clearedClosedTickets: (count) => `${count} erledigte ${count === 1 ? 'Karte' : 'Karten'} wurden aus dem Speicher entfernt.`,
+        clearClosedTicketsEmpty: 'Es gibt keine erledigten Tickets zum Löschen.',
         addTask: 'Aufgabe hinzufügen',
         linkBoardFile: 'Board-Datei verknüpfen',
         reconnectFile: 'Datei erneut verknüpfen',
@@ -125,6 +131,9 @@ export class BoardI18nService {
       connectFileFailed: 'File connection was cancelled or permission was not granted. Local backup is still active.',
       reloadedFromFile: (fileName) => `Reloaded board from ${fileName}. Local backup was refreshed.`,
       reloadFailed: 'No readable linked file was available. The local backup remains in use.',
+      clearClosedTickets: 'Delete closed tickets',
+      clearedClosedTickets: (count) => `Removed ${count} closed ${count === 1 ? 'ticket' : 'tickets'} from storage.`,
+      clearClosedTicketsEmpty: 'There are no closed tickets to delete.',
       addTask: 'Add task',
       linkBoardFile: 'Link board file',
       reconnectFile: 'Reconnect file',

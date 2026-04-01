@@ -41,6 +41,7 @@ export class BoardStateService {
   });
 
   readonly cardCount = computed(() => Object.keys(this.boardState().cards).length);
+  readonly closedCardCount = computed(() => this.boardState().columns.done.cardIds.length);
 
   constructor() {
     void this.restoreBoard();
@@ -151,6 +152,37 @@ export class BoardStateService {
         lastUpdatedAt: new Date().toISOString()
       };
     });
+  }
+
+  clearClosedCards(): number {
+    const closedCardIds = this.boardState().columns.done.cardIds;
+
+    if (closedCardIds.length === 0) {
+      return 0;
+    }
+
+    this.boardState.update((board) => {
+      const cards = { ...board.cards };
+
+      for (const cardId of board.columns.done.cardIds) {
+        delete cards[cardId];
+      }
+
+      return {
+        ...board,
+        cards,
+        columns: {
+          ...board.columns,
+          done: {
+            ...board.columns.done,
+            cardIds: []
+          }
+        },
+        lastUpdatedAt: new Date().toISOString()
+      };
+    });
+
+    return closedCardIds.length;
   }
 
   moveCard(

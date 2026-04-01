@@ -18,13 +18,19 @@ export class BoardPage {
   private readonly i18n = inject(BoardI18nService);
   private readonly boardState = inject(BoardStateService);
   private readonly activeEditor = signal<{ mode: 'create' | 'edit'; columnId: BoardColumnId; cardId: string | null } | null>(null);
-  private readonly persistenceEvent = signal<{ kind: 'idle' | 'connected' | 'connect-failed' | 'reloaded' | 'reload-failed'; fileName?: string }>({ kind: 'idle' });
+  private readonly persistenceEvent = signal<
+    { kind: 'idle' | 'connect-failed' | 'reload-failed' }
+    | { kind: 'connected' | 'reloaded'; fileName?: string }
+    | { kind: 'cleared-closed'; count: number }
+    | { kind: 'clear-closed-empty' }
+  >({ kind: 'idle' });
 
   protected readonly copy = this.i18n.copy;
   protected readonly locale = this.i18n.locale;
   protected readonly locales = this.i18n.locales;
   protected readonly columns = this.boardState.columns;
   protected readonly cardCount = this.boardState.cardCount;
+  protected readonly closedCardCount = this.boardState.closedCardCount;
   protected readonly connectedColumnIds = computed(() => this.columns().map((column) => column.id));
   protected readonly supportsFilePersistence = this.boardState.supportsFilePersistence;
   protected readonly linkedFileName = this.boardState.linkedFileName;
@@ -41,6 +47,10 @@ export class BoardPage {
         return copy.reloadedFromFile(event.fileName ?? 'linked file');
       case 'reload-failed':
         return copy.reloadFailed;
+      case 'cleared-closed':
+        return copy.clearedClosedTickets(event.count);
+      case 'clear-closed-empty':
+        return copy.clearClosedTicketsEmpty;
       case 'idle':
       default:
         return copy.localBackupActive;
@@ -136,6 +146,16 @@ export class BoardPage {
       reloaded
         ? { kind: 'reloaded', fileName: this.linkedFileName() ?? undefined }
         : { kind: 'reload-failed' }
+    );
+  }
+
+  protected clearClosedTickets(): void {
+    const clearedCount = this.boardState.clearClosedCards();
+
+    this.persistenceEvent.set(
+      clearedCount > 0
+        ? { kind: 'cleared-closed', count: clearedCount }
+        : { kind: 'clear-closed-empty' }
     );
   }
 }

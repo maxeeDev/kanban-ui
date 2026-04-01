@@ -31,6 +31,14 @@
       <button type="button" class="page-header__action" (click)="openCreateCard()">
         {{ copy().addTask }}
       </button>
+      <button
+        type="button"
+        class="page-header__action"
+        (click)="clearClosedTickets()"
+        [disabled]="closedCardCount() === 0"
+      >
+        {{ copy().clearClosedTickets }}
+      </button>
 
       @if (supportsFilePersistence()) {
         <button type="button" class="page-header__action" (click)="connectBoardFile()">
