@@ -96,10 +96,10 @@ function isBoardColumn(value: unknown, expectedId: BoardColumnId): value is Boar
     return false;
   }
 
-  return value.id === expectedId
-    && value.title === BOARD_COLUMN_TITLES[expectedId]
-    && Array.isArray(value.cardIds)
-    && value.cardIds.every((cardId) => typeof cardId === 'string');
+  return value['id'] === expectedId
+    && value['title'] === BOARD_COLUMN_TITLES[expectedId]
+    && Array.isArray(value['cardIds'])
+    && value['cardIds'].every((cardId) => typeof cardId === 'string');
 }
 
 function isKanbanCard(value: unknown): value is KanbanCard {
@@ -107,11 +107,11 @@ function isKanbanCard(value: unknown): value is KanbanCard {
     return false;
   }
 
-  return typeof value.id === 'string'
-    && typeof value.title === 'string'
-    && typeof value.description === 'string'
-    && typeof value.createdAt === 'string'
-    && typeof value.updatedAt === 'string';
+  return typeof value['id'] === 'string'
+    && typeof value['title'] === 'string'
+    && typeof value['description'] === 'string'
+    && typeof value['createdAt'] === 'string'
+    && typeof value['updatedAt'] === 'string';
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
