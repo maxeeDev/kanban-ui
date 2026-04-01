@@ -11,10 +11,26 @@
     <div class="page-header__meta" aria-label="Board summary">
       <p class="page-header__metric-label">Cards on board</p>
       <strong class="page-header__metric-value">{{ cardCount() }}</strong>
-      <p class="page-header__metric-note">Saved locally in this browser.</p>
+      <p class="page-header__metric-note">
+        @if (linkedFileName()) {
+          Saving to {{ linkedFileName() }} with local backup.
+        } @else {
+          Saved locally in this browser.
+        }
+      </p>
+      <p class="page-header__metric-note">{{ persistenceStatus() }}</p>
       <button type="button" class="page-header__action" (click)="openCreateCard()">
         Add task
       </button>
+
+      @if (supportsFilePersistence()) {
+        <button type="button" class="page-header__action" (click)="connectBoardFile()">
+          {{ linkedFileName() ? 'Reconnect file' : 'Link board file' }}
+        </button>
+        <button type="button" class="page-header__action" (click)="reloadFromFile()" [disabled]="!linkedFileName()">
+          Reload file
+        </button>
+      }
     </div>
   </header>
 

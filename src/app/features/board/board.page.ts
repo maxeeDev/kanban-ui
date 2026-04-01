@@ -16,10 +16,14 @@ import { BoardStateService } from './services/board-state.service';
 export class BoardPage {
   private readonly boardState = inject(BoardStateService);
   private readonly activeEditor = signal<{ mode: 'create' | 'edit'; columnId: BoardColumnId; cardId: string | null } | null>(null);
+  private readonly persistenceMessage = signal<string>('Local backup is active.');
 
   protected readonly columns = this.boardState.columns;
   protected readonly cardCount = this.boardState.cardCount;
   protected readonly connectedColumnIds = computed(() => this.columns().map((column) => column.id));
+  protected readonly supportsFilePersistence = this.boardState.supportsFilePersistence;
+  protected readonly linkedFileName = this.boardState.linkedFileName;
+  protected readonly persistenceStatus = this.persistenceMessage.asReadonly();
   protected readonly editor = this.activeEditor.asReadonly();
   protected readonly editorCard = computed(() => {
     const editor = this.activeEditor();
@@ -82,6 +86,26 @@ export class BoardPage {
       event.container.id as BoardColumnId,
       event.previousIndex,
       event.currentIndex
+    );
+  }
+
+  protected async connectBoardFile(): Promise<void> {
+    const connected = await this.boardState.connectBoardFile();
+
+    this.persistenceMessage.set(
+      connected
+        ? `Saving to ${this.linkedFileName() ?? 'board file'} and keeping local backup.`
+        : 'File connection was cancelled or permission was not granted. Local backup is still active.'
+    );
+  }
+
+  protected async reloadFromFile(): Promise<void> {
+    const reloaded = await this.boardState.reloadFromFile();
+
+    this.persistenceMessage.set(
+      reloaded
+        ? `Reloaded board from ${this.linkedFileName() ?? 'linked file'}. Local backup was refreshed.`
+        : 'No readable linked file was available. The local backup remains in use.'
     );
   }
 }

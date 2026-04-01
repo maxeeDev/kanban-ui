@@ -1,4 +1,4 @@
-import { Injectable, computed, effect, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 
 import {
   BOARD_COLUMN_ORDER,
@@ -7,15 +7,20 @@ import {
   KanbanCard,
   KanbanBoardState
 } from '../models/kanban.models';
+import { BoardFileStorageService } from './board-file-storage.service';
 import { createEmptyBoardState, isKanbanBoardState } from '../utils/board-state.utils';
 
 const BOARD_STORAGE_KEY = 'kanban-ui.board.v1';
 
 @Injectable({ providedIn: 'root' })
 export class BoardStateService {
+  private readonly fileStorage = inject(BoardFileStorageService);
   private readonly boardState = signal<KanbanBoardState>(createEmptyBoardState());
+  private readonly hasHydrated = signal(false);
 
   readonly state = this.boardState.asReadonly();
+  readonly supportsFilePersistence = this.fileStorage.supportsFilePersistence.asReadonly();
+  readonly linkedFileName = this.fileStorage.linkedFileName.asReadonly();
   readonly columns = computed<BoardColumnView[]>(() => {
     const board = this.boardState();
 
@@ -35,11 +40,39 @@ export class BoardStateService {
   readonly cardCount = computed(() => Object.keys(this.boardState().cards).length);
 
   constructor() {
-    this.restoreBoard();
+    void this.restoreBoard();
 
     effect(() => {
-      this.persistBoard(this.boardState());
+      const board = this.boardState();
+
+      if (!this.hasHydrated()) {
+        return;
+      }
+
+      this.persistBoard(board);
     });
+  }
+
+  async connectBoardFile(): Promise<boolean> {
+    const connected = await this.fileStorage.connectBoardFile(this.boardState());
+
+    if (connected) {
+      this.persistLocalBackup(this.boardState());
+    }
+
+    return connected;
+  }
+
+  async reloadFromFile(): Promise<boolean> {
+    const fileBoard = await this.fileStorage.loadBoardFromLinkedFile();
+
+    if (!fileBoard) {
+      return false;
+    }
+
+    this.boardState.set(fileBoard);
+    this.persistLocalBackup(fileBoard);
+    return true;
   }
 
   createCard(input: { title: string; description: string; columnId: BoardColumnId }): void {
@@ -184,10 +217,20 @@ export class BoardStateService {
     return null;
   }
 
-  private restoreBoard(): void {
+  private async restoreBoard(): Promise<void> {
+    const fileBoard = await this.fileStorage.loadBoardFromLinkedFile();
+
+    if (fileBoard) {
+      this.boardState.set(fileBoard);
+      this.persistLocalBackup(fileBoard);
+      this.hasHydrated.set(true);
+      return;
+    }
+
     const storedState = globalThis.localStorage?.getItem(BOARD_STORAGE_KEY);
 
     if (!storedState) {
+      this.hasHydrated.set(true);
       return;
     }
 
@@ -200,9 +243,16 @@ export class BoardStateService {
     } catch {
       this.boardState.set(createEmptyBoardState());
     }
+
+    this.hasHydrated.set(true);
   }
 
   private persistBoard(board: KanbanBoardState): void {
+    this.persistLocalBackup(board);
+    void this.fileStorage.saveBoard(board);
+  }
+
+  private persistLocalBackup(board: KanbanBoardState): void {
     globalThis.localStorage?.setItem(BOARD_STORAGE_KEY, JSON.stringify(board));
   }
 }
