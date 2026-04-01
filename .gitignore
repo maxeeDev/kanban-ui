@@ -31,13 +31,17 @@ yarn-error.log
 
 # Miscellaneous
 /.angular/cache
+/.ng
 .sass-cache/
 /connect.lock
 /coverage
+/e2e/test-output/
 /libpeerconnection.log
 testem.log
 /typings
 __screenshots__/
+*.tsbuildinfo
+*.stackdump
 
 # System files
 .DS_Store
